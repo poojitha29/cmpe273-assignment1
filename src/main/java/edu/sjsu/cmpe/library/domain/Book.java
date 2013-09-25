@@ -1,27 +1,26 @@
 package edu.sjsu.cmpe.library.domain;
 
 import java.util.List;
-
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.NotEmpty;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import java.util.ArrayList;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonInclude(Include.NON_NULL)
+/**
+* @author Poojitha
+*
+*/
+
+//@JsonInclude(Include.NON_NULL)
 public class Book {
     private long isbn;
-    @NotEmpty(message ="Required field.")
+ //  @NotEmpty(message ="Required field.")
     private String title;
-    @NotNull(message ="Required field.")
+ //  @NotNull(message ="Required field.")
     private String publicationdate;
     private String language;
     private String status = "Available";
     private int numpages;
     List<Author> authors;
-    List<Reviews> reviews;
+    List<Reviews> reviews=new ArrayList<Reviews>();
 
     // add more fields here
 
@@ -58,6 +57,13 @@ public class Book {
      */
     public long getIsbn() {
 	return isbn;
+    }
+    /**
+     * @param isbn
+     *            the isbn to set
+     */
+    public void setIsbn(long isbn) {
+	this.isbn = isbn;
     }
 
     /**
@@ -120,13 +126,7 @@ public class Book {
 		this.numpages = numpages;
 	}
 
-	/**
-     * @param isbn
-     *            the isbn to set
-     */
-    public void setIsbn(long isbn) {
-	this.isbn = isbn;
-    }
+	
 
     /**
      * @return the title

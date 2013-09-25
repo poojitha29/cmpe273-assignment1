@@ -1,5 +1,6 @@
 package edu.sjsu.cmpe.library.repository;
 
+import edu.sjsu.cmpe.library.domain.Author;
 import edu.sjsu.cmpe.library.domain.Book;
 import edu.sjsu.cmpe.library.domain.Reviews;
 
@@ -19,7 +20,7 @@ public interface BookRepositoryInterface {
      * @return a newly created book instance with auto-generated ISBN
      */
     Book saveBook(Book newBook);
-
+    Book createReview(Book newBook);
     /**
      * Retrieve an existing book by ISBN
      * 
@@ -28,10 +29,15 @@ public interface BookRepositoryInterface {
      * @return a book instance
      */
     Book getBookByISBN(Long isbn);
+
     
-    boolean deleteBookByISBN(Long isbn);
+    boolean deleteBookByISBN (Long isbn);
+  
     boolean updateBookByISBN(Long isbn,String status);
-    Reviews createReviews(Long isbn, Reviews review);
-   
+    
+    Reviews getReviewByID(Long isbn,int id);
+    Author getAuthorByID(Long isbn,int id);
+    boolean getAuthorByIsbn(Long isbn);
+    boolean getReviewsByIsbn(Long isbn);
     // TODO: add other operations here!
 }

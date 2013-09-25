@@ -2,7 +2,6 @@
  * 
  */
 package edu.sjsu.cmpe.library.dto;
-
 import edu.sjsu.cmpe.library.domain.Author;
 
 /**
@@ -11,7 +10,7 @@ import edu.sjsu.cmpe.library.domain.Author;
  */
 
 	public class AuthorDto extends LinksDto {
-	    private Author author;
+	    public Author author;
 
 	    /**
 	     * @param book
@@ -35,6 +34,5 @@ import edu.sjsu.cmpe.library.domain.Author;
 			this.author = author;
 		}
 
-	    
-
+		
 }

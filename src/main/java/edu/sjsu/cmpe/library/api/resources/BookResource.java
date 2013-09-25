@@ -1,6 +1,5 @@
 package edu.sjsu.cmpe.library.api.resources;
 
-import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -17,11 +16,9 @@ import com.yammer.dropwizard.jersey.params.LongParam;
 import com.yammer.metrics.annotation.Timed;
 
 import edu.sjsu.cmpe.library.domain.Book;
-import edu.sjsu.cmpe.library.domain.Reviews;
 import edu.sjsu.cmpe.library.dto.BookDto;
 import edu.sjsu.cmpe.library.dto.LinkDto;
 import edu.sjsu.cmpe.library.dto.LinksDto;
-import edu.sjsu.cmpe.library.repository.BookRepository;
 import edu.sjsu.cmpe.library.repository.BookRepositoryInterface;
 
 @Path("/v1/books")
@@ -51,8 +48,10 @@ public class BookResource {
 		"GET"));
 	bookResponse.addLink(new LinkDto("update-book", "/books/" + book.getIsbn(),
 			"PUT"));
-	bookResponse.addLink(new LinkDto("delete-book",
-		"/books/" + book.getIsbn(), "DELETE"));
+	bookResponse.addLink(new LinkDto("delete-book",	"/books/" + book.getIsbn(), "DELETE"));
+	if(book.getReviews().size()!=0){
+	bookResponse.addLink(new LinkDto("view-all-reviews","/books/" + book.getIsbn(), "GET"));
+	}
 	// add more links
 
 	return bookResponse;
@@ -85,7 +84,7 @@ public class BookResource {
     	return Response.status(200).entity(bookResponse).build();
     	}
     	else
-		return null;
+    		return Response.status(409).build();
     	
     }
     @PUT
@@ -98,27 +97,28 @@ public class BookResource {
         	bookResponse.addLink(new LinkDto("view-book", location, "GET"));
         	bookResponse.addLink(new LinkDto("update-book", location, "PUT"));
         	bookResponse.addLink(new LinkDto("delete-book", location, "DELETE"));
+        	bookResponse.addLink(new LinkDto("create-review", "/books/"+isbn+"reviews", "POST"));
         	return Response.status(200).entity(bookResponse).build();	
     	}
     	else
-    		return null;		
+    		return Response.status(409).build();		
     }
-    
-    @POST
-	@Path("/{isbn}/reviews")
-	@Timed(name = "create-review")
-	public Response createReviews(@PathParam("isbn") Long isbn,@Valid Reviews review) {
-
-		Reviews reviewResponse =  BookRepository.createReviews(isbn, review);
-		Book book=new Book();
-		BookDto bookCreateReviewResponse = new BookDto(book);
-		
-			bookCreateReviewResponse.addLink(new LinkDto("view-review", "/books/"+isbn+"/reviews/"+reviewResponse.getId() ,
-					"GET"));
-
-			return Response.status(201).entity(bookCreateReviewResponse).build();
-		}
-		
-	}
+/**    
+*    @POST
+*	@Path("/{isbn}/reviews")
+*	@Timed(name = "create-review")
+*	public Response createReviews(@PathParam("isbn") Long isbn,@Valid Reviews review) {
+*
+*		Reviews reviewResponse =  BookRepository.createReviews(isbn, review);
+*		Book book=new Book();
+*		BookDto bookCreateReviewResponse = new BookDto(book);
+*		
+*			bookCreateReviewResponse.addLink(new LinkDto("view-review", "/books/"+isbn+"/reviews/"+reviewResponse.getId() ,
+*					"GET"));
+*
+*			return Response.status(201).entity(bookCreateReviewResponse).build();
+*		}
+*/		
+}
 
 
