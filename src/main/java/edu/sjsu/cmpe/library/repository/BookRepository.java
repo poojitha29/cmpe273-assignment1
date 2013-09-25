@@ -4,6 +4,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import edu.sjsu.cmpe.library.domain.Author;
@@ -48,10 +49,6 @@ private final int generateAuthorID() {
 return ++authorID;
 }
 
-    private final int generateReviewID() {
-    	// increment existing isbnKey and return the new value
-    	return ++reviewID;
-        }
 /**
 * This will auto-generate unique ISBN for new books.
 */
@@ -72,6 +69,10 @@ authortemp.setId(generateAuthorID());
 bookInMemoryMap.putIfAbsent(isbn, newBook);
 
 return newBook;
+}
+
+private static int generateReviewID(){
+	return UUID.randomUUID().hashCode();
 }
 
 public Book createReview(Book newBook) {

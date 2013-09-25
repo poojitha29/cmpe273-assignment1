@@ -46,7 +46,7 @@ public class ReviewResource {
 	Book book = bookRepository.getBookByISBN(isbn.get());
 	List<Reviews> reviewtemp = book.getReviews();
 	reviewtemp.add(request);
-	String location = "/books/" + book.getIsbn()+  "/reviews/";
+	String location = "/books/" + book.getIsbn()+  "/reviews/" +request.getId();
 	LinksDto bookResponse = new LinksDto();
 	bookResponse.addLink(new LinkDto("view-review", location, "GET"));
 	
@@ -63,7 +63,7 @@ public class ReviewResource {
 	Reviews review = bookRepository.getReviewByID(isbn.get(),id);
 	Book book = bookRepository.getBookByISBN(isbn.get());
 	ReviewDto bookResponse = new ReviewDto(review);
-	bookResponse.addLink(new LinkDto("view-book", "/books/" + book.getIsbn() + "/review/" ,
+	bookResponse.addLink(new LinkDto("view-book", "/books/" + book.getIsbn() + "/review/" +review.getId(),
 		"GET"));
 	
 	// add more links

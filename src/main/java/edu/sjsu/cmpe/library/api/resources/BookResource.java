@@ -91,7 +91,7 @@ public class BookResource {
 	@Path("/{isbn}")
     @Timed(name = "update-book")
     public Response updateBookByIsbn(@PathParam("isbn") LongParam isbn,@QueryParam("status") String status) {
-    	if(bookRepository.updateBookByISBN(isbn.get(), status)==true){
+    	if(bookRepository.updateBookByISBN(isbn.get(), status)){
     		String location = "/books/";
         	LinksDto bookResponse = new LinksDto();
         	bookResponse.addLink(new LinkDto("view-book", location, "GET"));
