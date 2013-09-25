@@ -58,12 +58,11 @@ return ++authorID;
 @Override
 public Book saveBook(Book newBook) {
 checkNotNull(newBook, "newBook instance must not be null");
-// Generate new ISBN
+
 List<Author> author = newBook.getAuthors();
 Long isbn = generateISBNKey();
 newBook.setIsbn(isbn);
-//List<Reviews> review = newBook.getReviews();
-// TODO: create and associate other fields such as author
+
 for(int i=0; i<author.size();i++){
 Author authortemp =author.get(i);
 authortemp.setId(generateAuthorID());
@@ -75,7 +74,22 @@ bookInMemoryMap.putIfAbsent(isbn, newBook);
 return newBook;
 }
 
+public Book createReview(Book newBook) {
+	List<Reviews> review = newBook.getReviews();
+	Long isbn= newBook.getIsbn();
+	// TODO: create and associate other fields such as author
+	for(int i=0; i<review.size();i++){
+	Reviews reviewtemp =review.get(i);
+	reviewtemp.setId(generateReviewID());
+	}
+	
+	// Finally, save the new book into the map
+	bookInMemoryMap.putIfAbsent(isbn, newBook);
 
+	return newBook;
+//Reviews reviewtemp = new Reviews();
+//return reviewtemp;
+}
 
 /**
 * @see edu.sjsu.cmpe.library.repository.BookRepositoryInterface#getBookByISBN(java.lang.Long)
@@ -98,9 +112,9 @@ public Reviews getReviewByID(Long isbn,int id){
 	}
 	}
 	return null;
-			
-	
 }
+
+
 
 public boolean getAuthorByIsbn(Long isbn){
 	if(bookInMemoryMap.containsKey(isbn)){
@@ -152,22 +166,7 @@ else
 return false;
 }
 
-public Book createReview(Book newBook) {
-	List<Reviews> review = newBook.getReviews();
-	Long isbn= newBook.getIsbn();
-	// TODO: create and associate other fields such as author
-	for(int i=0; i<review.size();i++){
-	Reviews reviewtemp =review.get(i);
-	reviewtemp.setId(generateReviewID());
-	}
-	
-	// Finally, save the new book into the map
-	bookInMemoryMap.putIfAbsent(isbn, newBook);
 
-	return newBook;
-//Reviews reviewtemp = new Reviews();
-//return reviewtemp;
-}
 
 
 }
