@@ -57,14 +57,13 @@ public class ReviewResource {
     
     
     @GET
-    @Path("/{id}/")
+    @Path("/{id}")
     @Timed(name = "view-review")
     public Response getReviewByIsbn(@PathParam("isbn") LongParam isbn,@PathParam("id") int id) {
 	Reviews review = bookRepository.getReviewByID(isbn.get(),id);
 	Book book = bookRepository.getBookByISBN(isbn.get());
 	ReviewDto bookResponse = new ReviewDto(review);
-	bookResponse.addLink(new LinkDto("view-book", "/books/" + book.getIsbn() + "/review/" +review.getId(),
-		"GET"));
+	bookResponse.addLink(new LinkDto("view-review", "/books/" + book.getIsbn() + "/review/" +review.getId(),	"GET"));
 	
 	// add more links
 

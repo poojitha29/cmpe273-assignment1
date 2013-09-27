@@ -44,19 +44,17 @@ public class BookResource {
     public BookDto getBookByIsbn(@PathParam("isbn") LongParam isbn) {
 	Book book = bookRepository.getBookByISBN(isbn.get());
 	BookDto bookResponse = new BookDto(book);
-	bookResponse.addLink(new LinkDto("view-book", "/books/" + book.getIsbn(),
-		"GET"));
-	bookResponse.addLink(new LinkDto("update-book", "/books/" + book.getIsbn(),
-			"PUT"));
+	bookResponse.addLink(new LinkDto("view-book", "/books/" + book.getIsbn(),"GET"));
+	bookResponse.addLink(new LinkDto("update-book", "/books/" + book.getIsbn(),	"PUT"));
 	bookResponse.addLink(new LinkDto("delete-book",	"/books/" + book.getIsbn(), "DELETE"));
+	bookResponse.addLink(new LinkDto("create reviews","/books/" + book.getIsbn()+ "/reviews", "POST"));
 	if(book.getReviews().size()!=0){
-	bookResponse.addLink(new LinkDto("view-all-reviews","/books/" + book.getIsbn(), "GET"));
+	bookResponse.addLink(new LinkDto("view-all-reviews","/books/" + book.getIsbn()+"/reviews", "GET"));
 	}
 	// add more links
 
 	return bookResponse;
     }
-
     @POST
     @Timed(name = "create-book")
     public Response createBook(Book request) {
@@ -66,13 +64,17 @@ public class BookResource {
 	String location = "/books/" + savedBook.getIsbn();
 	LinksDto bookResponse = new LinksDto();
 	bookResponse.addLink(new LinkDto("view-book", location, "GET"));
-	bookResponse.addLink(new LinkDto("delete-book", location, "DELETE"));
-	bookResponse.addLink(new LinkDto("create-book", location, "POST"));
 	bookResponse.addLink(new LinkDto("update-book", location, "PUT"));
+	bookResponse.addLink(new LinkDto("delete-book", location, "DELETE"));
+	bookResponse.addLink(new LinkDto("create-review","/books/"+ savedBook.getIsbn() + "/reviews", "POST"));
+	
 	// Add other links if needed
 
 	return Response.status(201).entity(bookResponse).build();
     }
+    
+
+
 	
     @DELETE
 	@Path("/{isbn}")
@@ -94,10 +96,14 @@ public class BookResource {
     	if(bookRepository.updateBookByISBN(isbn.get(), status)){
     		String location = "/books/";
         	LinksDto bookResponse = new LinksDto();
+        	Book book = bookRepository.getBookByISBN(isbn.get());
         	bookResponse.addLink(new LinkDto("view-book", location, "GET"));
         	bookResponse.addLink(new LinkDto("update-book", location, "PUT"));
         	bookResponse.addLink(new LinkDto("delete-book", location, "DELETE"));
         	bookResponse.addLink(new LinkDto("create-review", "/books/"+isbn+"reviews", "POST"));
+        	if(book.getReviews().size()!=0){
+        		bookResponse.addLink(new LinkDto("view-all-reviews","/books/" + book.getIsbn()+"/reviews", "GET"));
+        		}
         	return Response.status(200).entity(bookResponse).build();	
     	}
     	else

@@ -29,7 +29,7 @@ import edu.sjsu.cmpe.library.dto.AuthorsDto;
 import edu.sjsu.cmpe.library.dto.LinkDto;
 import edu.sjsu.cmpe.library.repository.BookRepositoryInterface;
 
-//@Path("/v1/books")
+//@Path("/v1/books/")
 @Path("/v1/books/{isbn}/authors")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -52,16 +52,15 @@ public class AuthorResource {
   
 
     @GET
-    @Path("/{id}/")
+    @Path("/{id}")
     @Timed(name = "view-review")
     public Response getAuthoByIsbn(@PathParam("isbn") LongParam isbn,@PathParam("id") int id) {
 	
-    	Book book = bookRepository.getBookByISBN(isbn.get());
-    	Author author = bookRepository.getAuthorByID(isbn.get(),id);
+    Book book = bookRepository.getBookByISBN(isbn.get());
+    Author author = bookRepository.getAuthorByID(isbn.get(),id);
 	
 	AuthorDto bookResponse = new AuthorDto(author);
-	bookResponse.addLink(new LinkDto("view-book", "/books/" + book.getIsbn() + "/review/" ,
-		"GET"));
+	bookResponse.addLink(new LinkDto("view-author", "/books/" + book.getIsbn() + "/authors/" + author.getId() ,"GET"));
 	
 	// add more links
 
