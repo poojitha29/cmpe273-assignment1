@@ -21,7 +21,7 @@ private final ConcurrentHashMap<Long, Book> bookInMemoryMap;
 	/** Never access this key directly; instead use generateISBNKey() */
 private long isbnKey;
 
-//private int authorID;
+private int authorID;
 //private int reviewID;
 
 
@@ -46,7 +46,7 @@ return Long.valueOf(++isbnKey);
 
 private final int generateAuthorID() {
 // increment AuthorID and return the new value
-	return UUID.randomUUID().hashCode();
+	return ++authorID;
 }
 
 /**
